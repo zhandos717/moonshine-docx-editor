@@ -53,6 +53,7 @@ class DocxFilesController extends Controller
 
         $path = StoragePath::docx($data['path']);
         $this->authorizeAccess($path);
+        abort_unless(config('docx-editor.browser_create') || $this->files()->readFile($path) !== null, 403, 'Создание новых файлов отключено');
 
         $contents = $data['file']->get();
         abort_unless(str_starts_with($contents, "PK\x03\x04"), 422, 'Файл не похож на DOCX');
@@ -68,6 +69,7 @@ class DocxFilesController extends Controller
 
         $path = StoragePath::clean($data['path']);
         $this->authorizeAccess($path);
+        abort_unless(config('docx-editor.browser_create'), 403, 'Создание папок отключено');
 
         $this->files()->makeDirectory($path);
 
@@ -83,7 +85,7 @@ class DocxFilesController extends Controller
 
     private function authorizeAccess(string $path): void
     {
-        if ($ability = config('docx-editor.ability')) {
+        if ($ability = config('docx-editor.files_ability') ?? config('docx-editor.ability')) {
             Gate::forUser(MoonShineAuth::getGuard()->user())->authorize($ability, $path);
         }
     }

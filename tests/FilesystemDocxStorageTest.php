@@ -10,7 +10,7 @@ class FilesystemDocxStorageTest extends TestCase
 {
     protected function defineEnvironment($app): void
     {
-        $app['config']->set('docx-editor', ['disk' => 'local', 'directory' => 'docx-editor']);
+        $app['config']->set('docx-editor', ['disk' => 'local', 'directory' => 'docx-editor', 'browser_directory' => 'docx-files']);
     }
 
     public function test_read_returns_null_without_document(): void
@@ -59,10 +59,10 @@ class FilesystemDocxStorageTest extends TestCase
     {
         Storage::fake('local');
         $storage = new FilesystemDocxStorage();
-        Storage::disk('local')->put('docx-editor/a/one.docx', 'x');
-        Storage::disk('local')->put('docx-editor/a/readme.txt', 'x');
-        Storage::disk('local')->put('docx-editor/a/.history/one/old.docx', 'x');
-        Storage::disk('local')->put('docx-editor/a/sub/two.docx', 'x');
+        Storage::disk('local')->put('docx-files/a/one.docx', 'x');
+        Storage::disk('local')->put('docx-files/a/readme.txt', 'x');
+        Storage::disk('local')->put('docx-files/a/.history/one/old.docx', 'x');
+        Storage::disk('local')->put('docx-files/a/sub/two.docx', 'x');
 
         $this->assertSame(['dirs' => ['sub'], 'files' => ['one.docx']], $storage->browse('a'));
         $this->assertSame(['a'], $storage->browse('')['dirs']);
@@ -77,7 +77,7 @@ class FilesystemDocxStorageTest extends TestCase
         $storage->writeFile('a/one.docx', 'v2');
 
         $this->assertSame('v2', $storage->readFile('a/one.docx'));
-        $backups = Storage::disk('local')->files('docx-editor/a/.history/one');
+        $backups = Storage::disk('local')->files('docx-files/a/.history/one');
         $this->assertCount(1, $backups);
         $this->assertSame('v1', Storage::disk('local')->get($backups[0]));
     }

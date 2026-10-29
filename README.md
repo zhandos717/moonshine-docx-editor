@@ -68,6 +68,7 @@ class LegalDocxStorage implements DocxStorage
 - `discover` — показывать все документы из `DocxStorage::list()`
 - `allow_create` — разрешить создавать новые документы на странице
 - `ability` — Gate-ability для доступа к редактору (`null` — любой авторизованный пользователь MoonShine); получает ключ документа
+- `browser` — режим «Файлы» (по умолчанию выключен), `browser_directory` — его корень (отдельный от `directory`), `browser_create` — можно ли создавать файлы и папки, `files_ability` — Gate-ability для файлов (получает относительный путь, `null` — используется `ability`)
 - `storage` — класс, реализующий `Contracts\DocxStorage`
 - `disk`, `directory` — параметры стандартного хранилища
 - `max_size_kb` — максимальный размер загружаемого файла (10240)

@@ -101,7 +101,7 @@ class FilesystemDocxStorage implements BrowsableDocxStorage, DocxStorage
 
     private function absolute(string $path): string
     {
-        $root = trim(config('docx-editor.directory'), '/');
+        $root = trim(config('docx-editor.browser_directory'), '/');
 
         return $path === '' ? $root : "$root/$path";
     }
