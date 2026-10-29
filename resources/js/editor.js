@@ -91,6 +91,14 @@ if (mount) {
             });
             list.append(row);
         });
+        if (data.dirs.length === 0 && data.files.length === 0) {
+            const empty = document.createElement('p');
+            empty.className = 'dx-status';
+            empty.style.padding = '12px 4px';
+            empty.textContent = mount.dataset.msgEmptyFolder;
+            list.append(empty);
+        }
+
         data.files.forEach((name) => {
             const full = join(currentPath, name);
             const row = document.createElement('a');
@@ -125,6 +133,27 @@ if (mount) {
             input.value = '';
             browse(currentPath);
         }
+    });
+
+    q('[data-docx-upload-here]')?.addEventListener('change', async (e) => {
+        const status = q('[data-docx-upload-status]');
+        let done = 0;
+        for (const file of e.target.files) {
+            const form = new FormData();
+            form.append('path', join(currentPath, file.name));
+            form.append('file', file);
+            const res = await fetch(mount.dataset.saveFilesUrl, {
+                method: 'POST',
+                body: form,
+                credentials: 'same-origin',
+                headers: {'X-CSRF-TOKEN': csrf, Accept: 'application/json'},
+            });
+            if (res.ok) done++;
+            else status.textContent = `${mount.dataset.msgUploadFailed}: ${file.name}`;
+        }
+        if (done > 0) status.textContent = `${mount.dataset.msgUploaded} ${done}`;
+        e.target.value = '';
+        browse(currentPath);
     });
 
     q('[data-docx-mkfile]')?.addEventListener('click', () => {

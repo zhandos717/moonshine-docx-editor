@@ -52,6 +52,10 @@
          data-page-url="{{ $pageUrl }}"
          data-hidden-commands="{{ json_encode(config('docx-editor.hidden_commands', [])) }}"
          data-hide-unwired="{{ config('docx-editor.hide_unwired') ? 1 : 0 }}"
+         data-msg-empty-folder="{{ __('moonshine-docx-editor::ui.empty_folder') }}"
+         data-msg-uploaded="{{ __('moonshine-docx-editor::ui.uploaded') }}"
+         data-msg-upload-failed="{{ __('moonshine-docx-editor::ui.upload_failed') }}"
+         data-save-files-url="{{ route('moonshine.docx-editor.files.save') }}"
          data-msg-load-failed="{{ __('moonshine-docx-editor::ui.load_failed') }}"
          data-msg-not-ready="{{ __('moonshine-docx-editor::ui.not_ready') }}"
          data-msg-saved="{{ __('moonshine-docx-editor::ui.saved') }}"
@@ -113,6 +117,15 @@
                         <input type="text" data-docx-folder-name class="form-input" placeholder="{{ __('moonshine-docx-editor::ui.folder_name') }}">
                         <button type="button" class="btn" data-docx-mkdir>{!! $ico('plus') !!}{{ __('moonshine-docx-editor::ui.folder') }}</button>
                     </div>
+                    @if (config('docx-editor.browser_create'))
+                        <div class="dx-new" style="border-top:0;padding-top:0">
+                            <label class="btn" style="cursor:pointer;margin:0">
+                                {!! $ico('upload') !!}{{ __('moonshine-docx-editor::ui.upload_here') }}
+                                <input type="file" accept=".docx" multiple hidden data-docx-upload-here>
+                            </label>
+                            <span class="dx-status" data-docx-upload-status></span>
+                        </div>
+                    @endif
                     <div class="dx-new" style="border-top:0;padding-top:0">
                         <input type="text" data-docx-file-name class="form-input" placeholder="{{ __('moonshine-docx-editor::ui.file_name') }}">
                         <button type="button" class="btn" data-docx-mkfile>{!! $ico('plus') !!}{{ __('moonshine-docx-editor::ui.file') }}</button>
