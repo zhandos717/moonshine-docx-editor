@@ -1,0 +1,36 @@
+{
+  "name": "zhandos717/moonshine-docx-editor",
+  "description": "WYSIWYG DOCX editor for MoonShine admin panel, built on docen",
+  "keywords": ["moonshine", "docx", "editor", "word", "docen", "moonshine-4", "laravel", "admin-panel"],
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Zhandos717\\MoonshineDocxEditor\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Zhandos717\\MoonshineDocxEditor\\Tests\\": "tests/"
+    }
+  },
+  "authors": [
+    {"name": "Zhandos", "email": "zhandos.zhandarbekov@gmail.com", "role": "Developer"}
+  ],
+  "require": {
+    "php": "^8.2",
+    "moonshine/moonshine": "^4.0",
+    "illuminate/support": "^10.0 || ^11.0 || ^12.0 || ^13.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^8.0 || ^9.0 || ^10.0",
+    "phpunit/phpunit": "^10.5 || ^11.0"
+  },
+  "extra": {
+    "laravel": {
+      "providers": ["Zhandos717\\MoonshineDocxEditor\\DocxEditorServiceProvider"]
+    },
+    "branch-alias": {"dev-master": "1.x-dev"}
+  },
+  "scripts": {"test": "phpunit"}
+}
