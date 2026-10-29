@@ -1,6 +1,7 @@
 import {registerComponents, registerTranslation, applyTheme} from '@docen/editor';
 import ru from './ru.json';
 import {restoreFields} from './restore-fields.js';
+import {hideUnwired} from './hide-unwired.js';
 
 registerComponents();
 registerTranslation({languageTag: 'ru', $name: 'Русский', translations: ru});
@@ -222,6 +223,8 @@ if (mount) {
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && !document.querySelector('dialog[open]')) setExpanded(false);
         });
+
+        if (mount.dataset.hideUnwired === '1') hideUnwired(doc);
 
         load();
     }

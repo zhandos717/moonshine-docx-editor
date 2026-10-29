@@ -42,6 +42,9 @@ return [
     'disk' => env('DOCX_EDITOR_DISK', 'local'),
     'directory' => 'docx-editor',
 
+    // Скрывать недоделанные (неактивные) команды ленты docen, пустые группы и вкладки
+    'hide_unwired' => true,
+
     // Максимальный размер загружаемого файла, КБ
     'max_size_kb' => 10240,
 

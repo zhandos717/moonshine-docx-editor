@@ -85,6 +85,7 @@ class LegalDocxStorage implements DocxStorage
 - `browser` — режим «Файлы» (по умолчанию выключен), `browser_directory` — его корень (отдельный от `directory`), `browser_create` — можно ли создавать файлы и папки, `files_ability` — Gate-ability для файлов (получает относительный путь, `null` — используется `ability`)
 - `storage` — класс, реализующий `Contracts\DocxStorage`
 - `disk`, `directory` — параметры стандартного хранилища
+- `hide_unwired` — скрывать недоделанные (серые) команды ленты docen, пустые группы и вкладки (по умолчанию `true`)
 - `max_size_kb` — максимальный размер загружаемого файла (10240)
 
 ## Язык
