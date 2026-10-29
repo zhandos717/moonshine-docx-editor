@@ -60,11 +60,22 @@ class LegalDocxStorage implements DocxStorage
 
 - `auto_menu` — добавлять страницу в меню автоматически
 - `documents` — ключ => заголовок доступных документов
+- `ability` — Gate-ability для доступа к редактору (`null` — любой авторизованный пользователь MoonShine); получает ключ документа
 - `storage` — класс, реализующий `Contracts\DocxStorage`
 - `disk`, `directory` — параметры стандартного хранилища
 - `max_size_kb` — максимальный размер загружаемого файла (10240)
 
 ## Безопасность
+
+По умолчанию редактировать документы может любой пользователь админки. Ограничьте это через `ability`:
+
+```php
+// config/docx-editor.php
+'ability' => 'edit-legal-documents',
+
+// AppServiceProvider
+Gate::define('edit-legal-documents', fn ($user, $key = null) => $user->moonshine_user_role_id === 1);
+```
 
 Маршруты `docx-editor/{key}/file` и `docx-editor/{key}` закрыты middleware авторизации MoonShine. Ключ документа проверяется по списку `documents`, содержимое по сигнатуре DOCX (ZIP).
 

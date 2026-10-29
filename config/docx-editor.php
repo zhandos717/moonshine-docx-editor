@@ -11,6 +11,10 @@ return [
         // 'offer' => 'Публичная оферта',
     ],
 
+    // Gate-ability, которую должен иметь пользователь для чтения и правки документов.
+    // null — доступно любому авторизованному пользователю MoonShine. Ability получает ключ документа.
+    'ability' => null,
+
     // Реализация Contracts\DocxStorage: куда читать и сохранять файлы
     'storage' => FilesystemDocxStorage::class,
 

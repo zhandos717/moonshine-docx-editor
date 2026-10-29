@@ -6,6 +6,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Gate;
+use MoonShine\Laravel\MoonShineAuth;
 use Zhandos717\MoonshineDocxEditor\Contracts\DocxStorage;
 
 class DocxEditorController extends Controller
@@ -51,5 +53,9 @@ class DocxEditorController extends Controller
     private function ensureKnown(string $key): void
     {
         abort_unless(array_key_exists($key, config('docx-editor.documents')), 404);
+
+        if ($ability = config('docx-editor.ability')) {
+            Gate::forUser(MoonShineAuth::getGuard()->user())->authorize($ability, $key);
+        }
     }
 }

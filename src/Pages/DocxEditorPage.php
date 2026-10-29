@@ -2,6 +2,8 @@
 
 namespace Zhandos717\MoonshineDocxEditor\Pages;
 
+use Illuminate\Support\Facades\Gate;
+use MoonShine\Laravel\MoonShineAuth;
 use MoonShine\Laravel\Pages\Page;
 use MoonShine\Support\Attributes\Icon;
 use MoonShine\UI\Components\FlexibleRender;
@@ -21,6 +23,10 @@ class DocxEditorPage extends Page
 
     protected function components(): iterable
     {
+        if ($ability = config('docx-editor.ability')) {
+            Gate::forUser(MoonShineAuth::getGuard()->user())->authorize($ability);
+        }
+
         $documents = config('docx-editor.documents');
         $key = request('key', array_key_first($documents));
 
