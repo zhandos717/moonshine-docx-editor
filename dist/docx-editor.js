@@ -126840,7 +126840,11 @@ if (as?.dataset.saveUrl) {
     e.textContent = s, e.style.color = a ? "" : "#c0392b";
   }, r = async () => {
     const s = await fetch(as.dataset.fileUrl, { credentials: "same-origin" });
-    s.ok ? await t.openDOCX(await s.arrayBuffer()) : s.status !== 404 && i("Не удалось загрузить документ", !1);
+    if (s.ok) {
+      await t.openDOCX(await s.arrayBuffer());
+      const a = t.getBoundingClientRect().width;
+      t.setZoom(Math.max(40, Math.min(100, Math.floor((a - 48) / 794 * 100))));
+    } else s.status !== 404 && i("Не удалось загрузить документ", !1);
   }, o = async () => {
     const s = await t.saveDOCX(), a = new FormData();
     a.append("file", new Blob([s], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" }), "document.docx"), a.append("note", as.querySelector("[name=note]")?.value ?? ""), a.append("requires_reaccept", as.querySelector("[name=requires_reaccept]")?.checked ? "1" : "0");

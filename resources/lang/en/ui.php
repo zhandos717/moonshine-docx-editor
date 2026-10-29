@@ -7,6 +7,7 @@ return [
     'create' => 'Create',
     'upload' => 'Upload DOCX',
     'download' => 'Download',
+    'documents' => 'Documents',
     'note' => 'Note about the changes',
     'requires_reaccept' => 'Requires repeated consent',
     'save' => 'Save as new edition',

@@ -29,6 +29,8 @@ if (mount?.dataset.saveUrl) {
         const res = await fetch(mount.dataset.fileUrl, {credentials: 'same-origin'});
         if (res.ok) {
             await doc.openDOCX(await res.arrayBuffer());
+            const width = doc.getBoundingClientRect().width;
+            doc.setZoom(Math.max(40, Math.min(100, Math.floor(((width - 48) / 794) * 100))));
         } else if (res.status !== 404) {
             say('Не удалось загрузить документ', false);
         }
