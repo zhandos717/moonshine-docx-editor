@@ -40,7 +40,7 @@ class DocxEditorServiceProvider extends ServiceProvider
 
             $this->publishes([
                 __DIR__.'/../dist' => public_path('vendor/moonshine-docx-editor'),
-            ], 'moonshine-docx-editor-assets');
+            ], ['moonshine-docx-editor-assets', 'laravel-assets']);
 
             $this->publishes([
                 __DIR__.'/../resources/views' => resource_path('views/vendor/moonshine-docx-editor'),

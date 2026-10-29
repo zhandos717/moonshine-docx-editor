@@ -22,7 +22,7 @@ php artisan vendor:publish --tag=moonshine-docx-editor-config
 php artisan vendor:publish --tag=moonshine-docx-editor-assets
 ```
 
-Собранный JS-бандл (~3,7 МБ, ~1 МБ в gzip) лежит в `dist/` и публикуется в `public/vendor/moonshine-docx-editor`. `npm` на сервере не нужен. После обновления пакета публикуйте ассеты заново (`--force`).
+Собранный JS-бандл (~3,7 МБ, ~1 МБ в gzip) лежит в `dist/` и публикуется в `public/vendor/moonshine-docx-editor`. `npm` на сервере не нужен. Ассеты также входят в тег `laravel-assets`: если в `composer.json` приложения есть `vendor:publish --tag=laravel-assets --force` (как в стандартном Laravel), они обновляются сами при `composer install/update`.
 
 ## Использование
 
