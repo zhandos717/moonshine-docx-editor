@@ -9,6 +9,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Gate;
 use MoonShine\Laravel\MoonShineAuth;
 use Zhandos717\MoonshineDocxEditor\Contracts\DocxStorage;
+use Zhandos717\MoonshineDocxEditor\Support\DocumentCatalog;
 
 class DocxEditorController extends Controller
 {
@@ -18,14 +19,19 @@ class DocxEditorController extends Controller
     {
     }
 
-    public function file(string $key): Response
+    public function file(Request $request, string $key): Response
     {
         $this->ensureKnown($key);
 
         $contents = $this->storage->read($key);
         abort_if($contents === null, 404);
 
-        return response($contents, 200, ['Content-Type' => self::MIME, 'Cache-Control' => 'no-store']);
+        $headers = ['Content-Type' => self::MIME, 'Cache-Control' => 'no-store'];
+        if ($request->boolean('download')) {
+            $headers['Content-Disposition'] = 'attachment; filename="'.$key.'.docx"';
+        }
+
+        return response($contents, 200, $headers);
     }
 
     public function save(Request $request, string $key): JsonResponse
@@ -52,7 +58,10 @@ class DocxEditorController extends Controller
 
     private function ensureKnown(string $key): void
     {
-        abort_unless(array_key_exists($key, config('docx-editor.documents')), 404);
+        abort_unless(
+            array_key_exists($key, DocumentCatalog::all($this->storage)) || config('docx-editor.allow_create'),
+            404,
+        );
 
         if ($ability = config('docx-editor.ability')) {
             Gate::forUser(MoonShineAuth::getGuard()->user())->authorize($ability, $key);

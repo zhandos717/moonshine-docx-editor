@@ -4,6 +4,13 @@ namespace Zhandos717\MoonshineDocxEditor\Contracts;
 
 interface DocxStorage
 {
+    /**
+     * Документы, которые уже есть в хранилище: ключ => заголовок.
+     *
+     * @return array<string, string>
+     */
+    public function list(): array;
+
     /** Содержимое текущей редакции документа или null, если документа ещё нет. */
     public function read(string $key): ?string;
 

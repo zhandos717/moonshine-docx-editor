@@ -4,7 +4,16 @@ registerComponents();
 
 const mount = document.querySelector('[data-docx-editor]');
 
-if (mount) {
+const newButton = mount?.querySelector('[data-docx-new]');
+newButton?.addEventListener('click', () => {
+    const title = mount.querySelector('[data-docx-new-title]').value.trim();
+    if (!title) return;
+    const slug = title.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 64)
+        || `document-${Math.random().toString(36).slice(2, 8)}`;
+    window.location.href = `${mount.dataset.pageUrl}?key=${encodeURIComponent(slug)}&title=${encodeURIComponent(title)}`;
+});
+
+if (mount?.dataset.saveUrl) {
     const doc = mount.querySelector('docen-document');
     const status = mount.querySelector('[data-docx-status]');
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
@@ -43,6 +52,14 @@ if (mount) {
     };
 
     mount.querySelector('[data-docx-save]').addEventListener('click', save);
+    mount.querySelector('[data-docx-upload]').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            await doc.openDOCX(file);
+            say('Файл загружен в редактор, нажмите «Сохранить»');
+        }
+        e.target.value = '';
+    });
     doc.addEventListener('docen:save', (e) => {
         e.preventDefault();
         save();

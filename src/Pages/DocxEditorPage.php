@@ -7,6 +7,8 @@ use MoonShine\Laravel\MoonShineAuth;
 use MoonShine\Laravel\Pages\Page;
 use MoonShine\Support\Attributes\Icon;
 use MoonShine\UI\Components\FlexibleRender;
+use Zhandos717\MoonshineDocxEditor\Contracts\DocxStorage;
+use Zhandos717\MoonshineDocxEditor\Support\DocumentCatalog;
 
 #[Icon('document-text')]
 class DocxEditorPage extends Page
@@ -27,13 +29,21 @@ class DocxEditorPage extends Page
             Gate::forUser(MoonShineAuth::getGuard()->user())->authorize($ability);
         }
 
-        $documents = config('docx-editor.documents');
-        $key = request('key', array_key_first($documents));
+        $documents = DocumentCatalog::all(app(DocxStorage::class));
+        $canCreate = (bool) config('docx-editor.allow_create');
+
+        $key = (string) request('key', (string) array_key_first($documents));
+        $isKnown = array_key_exists($key, $documents);
+        if (! $isKnown && ! ($canCreate && DocumentCatalog::isValidKey($key))) {
+            $key = (string) array_key_first($documents);
+        }
 
         return [
             FlexibleRender::make(view('moonshine-docx-editor::editor', [
                 'documents' => $documents,
-                'key' => array_key_exists($key, $documents) ? $key : null,
+                'key' => $key !== '' ? $key : null,
+                'title' => $documents[$key] ?? request('title', $key),
+                'canCreate' => $canCreate,
                 'pageUrl' => $this->getRoute(),
             ])->render()),
         ];

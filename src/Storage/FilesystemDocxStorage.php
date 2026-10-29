@@ -7,6 +7,15 @@ use Zhandos717\MoonshineDocxEditor\Contracts\DocxStorage;
 
 class FilesystemDocxStorage implements DocxStorage
 {
+    public function list(): array
+    {
+        $root = trim(config('docx-editor.directory'), '/');
+        $keys = array_map('basename', Storage::disk(config('docx-editor.disk'))->directories($root));
+        sort($keys);
+
+        return array_combine($keys, $keys);
+    }
+
     public function read(string $key): ?string
     {
         $disk = Storage::disk(config('docx-editor.disk'));

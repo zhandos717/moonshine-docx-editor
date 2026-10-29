@@ -42,4 +42,16 @@ class FilesystemDocxStorageTest extends TestCase
         $this->assertSame('two', $storage->read('offer'));
         $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2}_\d{6}$/', $second['version']);
     }
+
+    public function test_list_returns_existing_document_keys(): void
+    {
+        Storage::fake('local');
+        $storage = new FilesystemDocxStorage();
+        $this->assertSame([], $storage->list());
+
+        $storage->write('offer', 'x');
+        $storage->write('privacy-policy', 'y');
+
+        $this->assertSame(['offer' => 'offer', 'privacy-policy' => 'privacy-policy'], $storage->list());
+    }
 }

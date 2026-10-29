@@ -26,7 +26,9 @@ php artisan vendor:publish --tag=moonshine-docx-editor-assets
 
 ## Использование
 
-Перечислите документы в `config/docx-editor.php`:
+Документы подхватываются из хранилища сами (`discover => true`), новые создаются прямо на странице (`allow_create => true`): введите название и нажмите «Создать». В редакторе доступны загрузка своего `.docx`, скачивание и сохранение как новая редакция.
+
+Конфиг `documents` необязателен: через него можно задать красивые названия или закрепить документы, которых ещё нет в хранилище:
 
 ```php
 'documents' => [
@@ -46,6 +48,9 @@ use Zhandos717\MoonshineDocxEditor\Contracts\DocxStorage;
 
 class LegalDocxStorage implements DocxStorage
 {
+    /** @return array<string, string> ключ => заголовок существующих документов */
+    public function list(): array { /* ... */ }
+
     public function read(string $key): ?string { /* байты текущей редакции или null */ }
 
     public function write(string $key, string $contents, array $meta = []): array
@@ -59,7 +64,9 @@ class LegalDocxStorage implements DocxStorage
 ## Конфигурация
 
 - `auto_menu` — добавлять страницу в меню автоматически
-- `documents` — ключ => заголовок доступных документов
+- `documents` — необязательный список ключ => заголовок
+- `discover` — показывать все документы из `DocxStorage::list()`
+- `allow_create` — разрешить создавать новые документы на странице
 - `ability` — Gate-ability для доступа к редактору (`null` — любой авторизованный пользователь MoonShine); получает ключ документа
 - `storage` — класс, реализующий `Contracts\DocxStorage`
 - `disk`, `directory` — параметры стандартного хранилища
