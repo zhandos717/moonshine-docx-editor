@@ -50,6 +50,7 @@
 @else
     <div class="dx" data-docx-editor
          data-page-url="{{ $pageUrl }}"
+         data-hidden-commands="{{ json_encode(config('docx-editor.hidden_commands', [])) }}"
          data-hide-unwired="{{ config('docx-editor.hide_unwired') ? 1 : 0 }}"
          data-msg-load-failed="{{ __('moonshine-docx-editor::ui.load_failed') }}"
          data-msg-not-ready="{{ __('moonshine-docx-editor::ui.not_ready') }}"

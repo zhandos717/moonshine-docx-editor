@@ -22,7 +22,7 @@ const controlsOf = (group) => {
 
 // docen показывает недоделанные команды ленты серыми (атрибут disabled). Скрываем их, пустые группы
 // и вкладки; если кнопка позже станет активной, она вернётся.
-export function hideUnwired(host) {
+export function hideUnwired(host, hiddenCommands = []) {
     const apply = () => {
         if (document.hidden || !host.shadowRoot) return;
 
@@ -30,7 +30,8 @@ export function hideUnwired(host) {
         walk(host.shadowRoot, (root) => roots.push(root));
 
         roots.forEach((root) => root.querySelectorAll(BUTTONS).forEach((button) => {
-            button.style.display = button.hasAttribute('disabled') ? 'none' : '';
+            const off = button.hasAttribute('disabled') || hiddenCommands.includes(button.getAttribute('event'));
+            button.style.display = off ? 'none' : '';
         }));
 
         roots.forEach((root) => root.querySelectorAll('docen-ribbon-group').forEach((group) => {

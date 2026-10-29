@@ -224,7 +224,7 @@ if (mount) {
             if (e.key === 'Escape' && !document.querySelector('dialog[open]')) setExpanded(false);
         });
 
-        if (mount.dataset.hideUnwired === '1') hideUnwired(doc);
+        if (mount.dataset.hideUnwired === '1') hideUnwired(doc, JSON.parse(mount.dataset.hiddenCommands || '[]'));
 
         load();
     }
