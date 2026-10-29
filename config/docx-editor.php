@@ -22,6 +22,10 @@ return [
     // null — доступно любому авторизованному пользователю MoonShine. Ability получает ключ документа.
     'ability' => null,
 
+    // Режим «Файлы»: обзор хранилища по папкам и правка .docx на месте (нужен BrowsableDocxStorage).
+    // Перед перезаписью предыдущая версия копируется в .history/ рядом с файлом.
+    'browser' => true,
+
     // Реализация Contracts\DocxStorage: куда читать и сохранять файлы
     'storage' => FilesystemDocxStorage::class,
 

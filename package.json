@@ -2,7 +2,14 @@
   "name": "moonshine-docx-editor-assets",
   "private": true,
   "type": "module",
-  "scripts": {"build": "vite build"},
-  "dependencies": {"@docen/editor": "0.7.0"},
-  "devDependencies": {"vite": "^6.0.0"}
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@docen/editor": "0.7.0",
+    "fflate": "0.8.3"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
 }

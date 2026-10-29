@@ -54,4 +54,46 @@ class FilesystemDocxStorageTest extends TestCase
 
         $this->assertSame(['offer' => 'offer', 'privacy-policy' => 'privacy-policy'], $storage->list());
     }
+
+    public function test_browse_lists_folders_and_docx_only_and_hides_history(): void
+    {
+        Storage::fake('local');
+        $storage = new FilesystemDocxStorage();
+        Storage::disk('local')->put('docx-editor/a/one.docx', 'x');
+        Storage::disk('local')->put('docx-editor/a/readme.txt', 'x');
+        Storage::disk('local')->put('docx-editor/a/.history/one/old.docx', 'x');
+        Storage::disk('local')->put('docx-editor/a/sub/two.docx', 'x');
+
+        $this->assertSame(['dirs' => ['sub'], 'files' => ['one.docx']], $storage->browse('a'));
+        $this->assertSame(['a'], $storage->browse('')['dirs']);
+    }
+
+    public function test_write_file_backs_up_previous_version(): void
+    {
+        Storage::fake('local');
+        $storage = new FilesystemDocxStorage();
+
+        $storage->writeFile('a/one.docx', 'v1');
+        $storage->writeFile('a/one.docx', 'v2');
+
+        $this->assertSame('v2', $storage->readFile('a/one.docx'));
+        $backups = Storage::disk('local')->files('docx-editor/a/.history/one');
+        $this->assertCount(1, $backups);
+        $this->assertSame('v1', Storage::disk('local')->get($backups[0]));
+    }
+
+    public function test_paths_outside_root_or_not_docx_are_rejected(): void
+    {
+        Storage::fake('local');
+        $storage = new FilesystemDocxStorage();
+
+        foreach (['../secret.docx', 'a/../../x.docx', '.history/x.docx', 'a/notes.txt'] as $bad) {
+            try {
+                $storage->readFile($bad);
+                $this->fail("Путь $bad должен быть отклонён");
+            } catch (\Symfony\Component\HttpKernel\Exception\HttpException $e) {
+                $this->assertSame(422, $e->getStatusCode());
+            }
+        }
+    }
 }
